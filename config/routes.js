@@ -51,7 +51,7 @@ export default [
                     path: '/ui/theme',
                     name: '主题颜色更换',
                     icon: 'smile',
-                    component: './ui/adv',
+                    component: './ui/theme',
                     authority: ['admin'],
                   },
                 ],

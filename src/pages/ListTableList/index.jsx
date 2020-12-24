@@ -91,7 +91,7 @@ const TableList = () => {
    * 国际化配置
    */
 
-  const intl = useIntl();
+ 
   const columns = [
     {
       title: '规则名称',

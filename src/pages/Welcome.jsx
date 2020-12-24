@@ -13,7 +13,7 @@ const CodePreview = ({ children }) => (
 );
 
 export default () => {
-  const intl = useIntl();
+ 
   return (
     <PageContainer>
       <Card>

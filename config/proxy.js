@@ -7,30 +7,12 @@
  */
 export default {
   dev: {
-    '/api/': {
+    '/api': {
       target: 'http://huangbowen.cn:2915/api/v1/',
       changeOrigin: true,
       pathRewrite: {
-        '^': '',
+        '^/api': '',
       },
     },
-  },
-  test: {
-    '/api/': {
-      target: 'https://preview.pro.ant.design',
-      changeOrigin: true,
-      pathRewrite: {
-        '^': '',
-      },
-    },
-  },
-  pre: {
-    '/api/': {
-      target: 'your pre url',
-      changeOrigin: true,
-      pathRewrite: {
-        '^': '',
-      },
-    },
-  },
+  }
 };

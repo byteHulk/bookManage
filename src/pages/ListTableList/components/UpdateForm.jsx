@@ -11,7 +11,7 @@ import {
 import { useIntl, FormattedMessage } from 'umi';
 
 const UpdateForm = (props) => {
-  const intl = useIntl();
+ 
   return (
     <StepsForm
       stepsProps={{
