@@ -9,6 +9,10 @@ const Model = {
     color: '#fff',
   },
   effects: {
+    *getAdv({ callback }, { call, put }) {
+      const response = yield call(ui.getAdv);
+     callback(response)
+    },
     *getTheme({ payload }, { call, put }) {
       const response = yield call(ui.getTheme);
       yield put({
@@ -17,13 +21,14 @@ const Model = {
       })
     },
     *setTheme({ payload }, { call, put }) {
-      console.log(payload,'set')
+      // console.log(payload,'set')
       const response = yield call(ui.setTheme,payload);
+      message.destroy()
       message.success('主题更换成功')
-      yield put({
-        type: 'changeColor',
-        payload: response,
-      })
+      // yield put({
+      //   type: 'changeColor',
+      //   payload: payload.color,
+      // })
     },
     logout() {
       const { redirect } = getPageQuery(); // Note: There may be security issues, please note

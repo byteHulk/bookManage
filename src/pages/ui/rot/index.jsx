@@ -1,45 +1,121 @@
 import React from 'react';
-import { HeartTwoTone, SmileTwoTone } from '@ant-design/icons';
-import { Card, Typography, Alert } from 'antd';
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import { Card,Upload, Modal } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { connect } from 'umi';
+import styles from './index.less';
 
-export default () => {
-  return (
-    <PageHeaderWrapper
-      content={' 这个页面只有 admin 权限才能查看'}
+function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
+
+class PicturesWall extends React.Component {
+  state = {
+    previewVisible: false,
+    previewImage: '',
+    previewTitle: '',
+    fileList: [
+      {
+        uid: '-1',
+        name: 'image.png',
+        status: 'done',
+        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      },
+      {
+        uid: '-2',
+        name: 'image.png',
+        status: 'done',
+        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      },
+      {
+        uid: '-3',
+        name: 'image.png',
+        status: 'done',
+        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      },
+      {
+        uid: '-4',
+        name: 'image.png',
+        status: 'done',
+        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      },
+      {
+        uid: '-xxx',
+        percent: 50,
+        name: 'image.png',
+        status: 'uploading',
+        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      },
+      {
+        uid: '-5',
+        name: 'image.png',
+        status: 'error',
+      },
+    ],
+  };
+
+  handleCancel = () => this.setState({ previewVisible: false });
+
+  handlePreview = async file => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+
+    this.setState({
+      previewImage: file.url || file.preview,
+      previewVisible: true,
+      previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
+    });
+  };
+
+  handleChange = ({ fileList }) => this.setState({ fileList });
+
+  render() {
+    const { previewVisible, previewImage, fileList, previewTitle } = this.state;
+    const uploadButton = (
+      <div>
+        <PlusOutlined />
+        <div style={{ marginTop: 8 }}>Upload</div>
+      </div>
+    );
+    return (
+      <Card
+      bordered={false}
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        background:'#fff'
+      }}
     >
-      <Card>
-        <Alert
-          message={'更快更强的重型组件，已经发布。'}
-          type="success"
-          showIcon
-          banner
-          style={{
-            margin: -12,
-            marginBottom: 48,
-          }}
-        />
-        <Typography.Title
-          level={2}
-          style={{
-            textAlign: 'center',
-          }}
+        <Upload
+          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          listType="picture-card"
+          fileList={fileList}
+          onPreview={this.handlePreview}
+          onChange={this.handleChange}
+          itemRender={()=><div>111</div>}
         >
-          <SmileTwoTone /> Ant Design Pro <HeartTwoTone twoToneColor="#eb2f96" /> You
-        </Typography.Title>
+          {fileList.length >= 8 ? null : uploadButton}
+        </Upload>
+        <Modal
+          visible={previewVisible}
+          title={previewTitle}
+          footer={null}
+          onCancel={this.handleCancel}
+        >
+          <img alt="example" style={{ width: '100%' }} src={previewImage} />
+        </Modal>
       </Card>
-      <p
-        style={{
-          textAlign: 'center',
-          marginTop: 24,
-        }}
-      >
-        Want to add more pages? Please refer to{' '}
-        <a href="https://pro.ant.design/docs/block-cn" target="_blank" rel="noopener noreferrer">
-          use block
-        </a>
-        。
-      </p>
-    </PageHeaderWrapper>
-  );
-};
+    );
+  }
+}
+
+export default connect(({ ui }) => ({
+  ...ui,
+}))(PicturesWall);

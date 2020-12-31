@@ -27,10 +27,10 @@ const GlobalHeaderRight = (props) => {
         placeholder="站内搜索"
         // defaultValue="广告屏更换"
         options={[
-          {
-            label: <Link to="/ui/adv">广告屏更换</Link>,
-            value: '广告屏更换',
-          },
+          // {
+          //   label: <Link to="/ui/adv">广告屏更换</Link>,
+          //   value: '广告屏更换',
+          // },
           {
             label: <a href="next.ant.design">轮播图更换</a>,
             value: '轮播图更换',
