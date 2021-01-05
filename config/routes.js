@@ -25,7 +25,29 @@ export default [
             routes: [
               {
                 path: '/',
-                redirect: '/ui/adv',
+                redirect: '/stati/rank',
+              },
+              {
+                path: '/stati',
+                name: '数据统计',
+                icon: 'crown',
+                authority: ['admin'],
+                routes: [
+                  {
+                    path: '/stati/rank',
+                    name: '借阅分析',
+                    icon: 'smile',
+                    component: './stati/rank',
+                    authority: ['admin'],
+                  },
+                  {
+                    path: '/stati/inv',
+                    name: '书架盘点',
+                    icon: 'smile',
+                    component: './stati/inv',
+                    authority: ['admin'],
+                  },
+                ],
               },
               {
                 path: '/ui',
@@ -52,28 +74,6 @@ export default [
                     name: '主题颜色更换',
                     icon: 'smile',
                     component: './ui/theme',
-                    authority: ['admin'],
-                  },
-                ],
-              },
-              {
-                path: '/stati',
-                name: '数据统计',
-                icon: 'crown',
-                authority: ['admin'],
-                routes: [
-                  {
-                    path: '/stati/rank',
-                    name: '借阅排行',
-                    icon: 'smile',
-                    component: './stati/rank',
-                    authority: ['admin'],
-                  },
-                  {
-                    path: '/stati/inv',
-                    name: '书架盘点',
-                    icon: 'smile',
-                    component: './stati/inv',
                     authority: ['admin'],
                   },
                 ],

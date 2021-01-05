@@ -99,9 +99,9 @@ class PicturesWall extends React.Component {
           fileList={fileList}
           onPreview={this.handlePreview}
           onChange={this.handleChange}
-          itemRender={()=><div>111</div>}
+          // itemRender={()=><div>111</div>}
         >
-          {fileList.length >= 8 ? null : uploadButton}
+          {fileList.length >= 1 ? null : uploadButton}
         </Upload>
         <Modal
           visible={previewVisible}

@@ -1,116 +1,114 @@
-import React, { useEffect, useState } from 'react';
-import { Card, Upload, Modal } from 'antd';
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import React from 'react';
+import { Card, Upload, Modal, Button } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { connect } from 'umi';
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import styles from './index.less';
 
-const Adv = (props) => {
-  const [imageUrl, setImageUrl] = useState('');
-  const [loading, setLoading] = useState(false);
+function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+}
 
-  useEffect(() => {
-    getFileList();
-  }, []);
+class PicturesWall extends React.Component {
+  state = {
+    previewVisible: false,
+    previewImage: '',
+    previewTitle: '',
+    fileList: [],
+  };
 
-  const getFileList = () => {
-    // console.log(color)
-    const { dispatch } = props;
+  componentDidMount() {
+    this.getAdv();
+  }
+
+  componentWillUnmount() {}
+
+  getAdv = () => {
+    const { dispatch } = this.props;
+    const that = this;
     dispatch({
       type: 'ui/getAdv',
       callback({ data }) {
-        setImageUrl(data);
+        that.setState({
+          fileList: [
+            {
+              uid: '-xxx',
+              name: 'image.png',
+              status: 'done',
+              url: data,
+            },
+          ],
+        });
+        console.log(data);
+        // setImageUrl(data);
       },
     });
   };
 
-  const handlePreview = (info) => {}
-  const handleChange = (info) => {
-    if (info.file.status === 'uploading') {
-      tsetLoading(true);
-      return;
+  handleCancel = () => this.setState({ previewVisible: false });
+
+  handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
     }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, (imageUrl) =>
-        this.setState({
-          imageUrl,
-          loading: false,
-        }),
-      );
-    }
+
+    this.setState({
+      previewImage: file.url || file.preview,
+      previewVisible: true,
+      previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
+    });
   };
 
-  const uploadButton = (
-    <div style={{width: '1080px', height: '1920px'}}>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  );
-  return (
-    <PageHeaderWrapper>
+  handleChange = ({ fileList }) => this.setState({ fileList });
+
+  render() {
+    const { previewVisible, previewImage, fileList, previewTitle } = this.state;
+    const uploadButton = (
+      <div>
+        <PlusOutlined />
+        <div style={{ marginTop: 8 }}>Upload</div>
+      </div>
+    );
+    const uploadProps = {
+      name: 'file',
+      action: 'http://huangbowen.cn:2915/api/v1/config/uploadFile?type=advert',
+      // data: { file: 'file', type: 'advert' },
+      accept: 'image/*',
+      listType: 'picture-card',
+      fileList,
+      onPreview: this.handlePreview,
+      onChange: this.handleChange,
+    };
+    return (
       <Card
+        title="广告屏更换"
         bordered={false}
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
+        // style={{
+        //   display: 'flex',
+        //   flexDirection: 'row',
+        //   justifyContent: 'center',
+        //   alignItems: 'center',
+        //   background: '#fff',
+        // }}
       >
-        <Upload
-          action="/api/config/uploadFile"
-          listType="picture-card"
-          showUploadList={false}
-          beforeUpload={beforeUpload}
-          className={styles.ss}
-          data={(file) => {
-            return {
-              type: 'advert',
-            };
-          }}
-          // fileList={fileList}
-          onPreview={handlePreview}
-          onChange={handleChange}
-        >
-          {imageUrl ? (
-            null
-            // <img src={imageUrl} alt="avatar" className={styles.img} />
-          ) : (
-            uploadButton
-          )}
-        </Upload>
-        {/* <Modal
+        <Upload {...uploadProps}>{fileList.length >= 1 ? null : uploadButton}</Upload>
+        <Modal
           visible={previewVisible}
           title={previewTitle}
           footer={null}
           onCancel={this.handleCancel}
         >
           <img alt="example" style={{ width: '100%' }} src={previewImage} />
-        </Modal> */}
+        </Modal>
       </Card>
-    </PageHeaderWrapper>
-  );
-};
+    );
+  }
+}
 
 export default connect(({ ui }) => ({
   ...ui,
-}))(Adv);
-
-function getBase64(img, callback) {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
-
-function beforeUpload(file) {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-  if (!isJpgOrPng) {
-    message.error('You can only upload JPG/PNG file!');
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!');
-  }
-  return isJpgOrPng && isLt2M;
-}
+}))(PicturesWall);
