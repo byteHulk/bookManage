@@ -56,17 +56,17 @@ export default [
                 authority: ['admin'],
                 routes: [
                   {
-                    path: '/ui/adv',
+                    path: '/ui/start',
                     name: '广告屏更换',
                     icon: 'smile',
-                    component: './ui/adv',
+                    component: './ui/start',
                     authority: ['admin'],
                   },
                   {
-                    path: '/ui/rot',
+                    path: '/ui/adv',
                     name: '轮播图更换',
                     icon: 'smile',
-                    component: './ui/rot',
+                    component: './ui/adv',
                     authority: ['admin'],
                   },
                   {

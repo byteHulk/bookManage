@@ -9,6 +9,10 @@ const Model = {
     color: '#fff',
   },
   effects: {
+    *getStart({ callback }, { call, put }) {
+      const response = yield call(ui.getStart);
+     callback(response)
+    },
     *getAdv({ callback }, { call, put }) {
       const response = yield call(ui.getAdv);
      callback(response)

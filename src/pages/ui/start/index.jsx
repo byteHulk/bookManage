@@ -22,27 +22,29 @@ class PicturesWall extends React.Component {
   };
 
   componentDidMount() {
-    this.getAdv();
+    this.getStart();
   }
 
   componentWillUnmount() {}
 
-  getAdv = () => {
+  getStart = () => {
     const { dispatch } = this.props;
     const that = this;
     dispatch({
-      type: 'ui/getAdv',
+      type: 'ui/getStart',
       callback({ data }) {
         that.setState({
-          fileList: 
-            data.map((d, i) => ({
-              uid: `d_${i}`,
-              name: `d_${i}.png`,
+          fileList: [
+            {
+              uid: '-xxx',
+              name: 'image.png',
               status: 'done',
-              url: d,
-            }))
-          
+              url: data,
+            },
+          ],
         });
+        // console.log(data);
+        // setImageUrl(data);
       },
     });
   };
@@ -83,7 +85,7 @@ class PicturesWall extends React.Component {
     };
     return (
       <Card
-        title="轮播列表更换"
+        title="广告屏更换"
         bordered={false}
         // style={{
         //   display: 'flex',
@@ -93,7 +95,7 @@ class PicturesWall extends React.Component {
         //   background: '#fff',
         // }}
       >
-        <Upload {...uploadProps}>{fileList.length >= 4 ? null : uploadButton}</Upload>
+        <Upload {...uploadProps}>{fileList.length >= 1 ? null : uploadButton}</Upload>
         <Modal
           visible={previewVisible}
           title={previewTitle}

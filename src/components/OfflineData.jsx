@@ -52,6 +52,9 @@ const OfflineData = ({ activeKey, loading, offlineData, offlineChartData, handle
       marginTop: 32,
     }}
   >
+    {
+      console.log(offlineData,'---')
+    }
     <Tabs activeKey={activeKey} onChange={handleTabChange}>
       {offlineData.map((shop) => (
         <TabPane tab={<CustomTab data={shop} currentTabKey={activeKey} />} key={shop.name}>
@@ -64,8 +67,8 @@ const OfflineData = ({ activeKey, loading, offlineData, offlineChartData, handle
               height={400}
               data={offlineChartData}
               titleMap={{
-                y1: '客流量',
-                y2: '支付笔数',
+                y1: '借阅数',
+                y2: '归还数',
               }}
             />
           </div>

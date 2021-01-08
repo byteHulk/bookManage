@@ -14,8 +14,13 @@ export async function setTheme({color}) {
 }
 
 //获取广告屏
-export async function getAdv() {
+export async function getStart() {
   return request('/api/config/startad');
+}
+
+//获取轮播列表
+export async function getAdv() {
+  return request('/api/config/advertList');
 }
 
 // //更改主题
